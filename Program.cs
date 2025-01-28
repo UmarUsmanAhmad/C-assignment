@@ -1,11 +1,14 @@
-﻿namespace ContactListAssignment;
 using System;
+using Contactlist;
 
-public class Program
+namespace ContactList;
+
+class Program
 {
-    public static void Main()
+    static void Main()
     {
-        var manager = new ContactManager();
+        var fileService = new FileService();
+        var manager = new ContactManager(fileService);
 
         while (true)
         {
@@ -22,15 +25,12 @@ public class Program
                 case "1":
                     ListAllContacts(manager);
                     break;
-
                 case "2":
                     AddNewContact(manager);
                     break;
-
                 case "3":
                     Console.WriteLine("Goodbye!");
                     return;
-
                 default:
                     Console.WriteLine("Invalid choice. Please try again.");
                     break;
@@ -38,7 +38,7 @@ public class Program
         }
     }
 
-    private static void ListAllContacts(ContactManager manager)
+    static void ListAllContacts(ContactManager manager)
     {
         var contacts = manager.ListContacts();
         if (contacts.Count > 0)
@@ -54,12 +54,14 @@ public class Program
         }
     }
 
-    private static void AddNewContact(ContactManager manager)
+    static void AddNewContact(ContactManager manager)
     {
         Console.Write("Enter name: ");
         var name = Console.ReadLine();
+
         Console.Write("Enter phone: ");
         var phone = Console.ReadLine();
+
         Console.Write("Enter email: ");
         var email = Console.ReadLine();
 
