@@ -1,38 +1,26 @@
-﻿using System;
-namespace ContactListAssignment;
-using System.Text.Json;
+using Contactlist;
 
+namespace ContactList;
 
 public class ContactManager
 {
-    private readonly string fileName = "contacts.json";
-    private List<Contact> contacts = new List<Contact>();
+    private readonly List<Contact> contacts;
+    private readonly FileService fileService;
 
-    public ContactManager()
+    public ContactManager(FileService fileService)
     {
-        if (File.Exists(fileName))
-        {
-            var json = File.ReadAllText(fileName);
-            contacts = JsonSerializer.Deserialize<List<Contact>>(json) ?? new List<Contact>();
-        }
+        this.fileService = fileService;
+        contacts = fileService.LoadContacts(); 
     }
 
     public void AddContact(string name, string phone, string email)
     {
         contacts.Add(new Contact { Name = name, Phone = phone, Email = email });
-        SaveContacts();
+        fileService.SaveContacts(contacts); 
     }
 
     public List<Contact> ListContacts()
     {
         return contacts;
     }
-
-    private void SaveContacts()
-    {
-        var json = JsonSerializer.Serialize(contacts, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(fileName, json);
-    }
 }
-
-
